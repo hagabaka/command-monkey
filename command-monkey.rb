@@ -9,16 +9,17 @@ class CommandMonkey
   # program: the interactive program to execute
   # prompt: regex detecting the interactive program's prompt
   def initialize(program, prompt)
+    @prompt = prompt
     @library = Actor.current
 
     # run the program in a separate thread so that this library does not block
     # the client program
     @operator = Actor.spawn do
       PTY.spawn program do |output, input, pid|
+        @output = output
 
-        output.expect prompt do |text|
+        get_reply do |reply|
           puts "Launched #{program}, PID #{pid}"
-          puts text
         end
 
         loop do
@@ -30,8 +31,7 @@ class CommandMonkey
               puts "Sent #{text}"
 
               # wait for the next prompt, which should mark the end of the reply
-              output.expect prompt do |reply, *_|
-                puts "Received #{reply}"
+              get_reply do |reply|
                 @library << [:reply, reply]
               end
             end
@@ -50,6 +50,16 @@ class CommandMonkey
         puts "Received reply"
         reply
       end
+    end
+  end
+
+  # Wait for the program to show its prompt, and return the output before the
+  # prompt
+  def get_reply
+    @output.expect @prompt do |reply, *_|
+      reply = reply.gsub(/#{@prompt}\z/m, '')
+      puts "Received #{reply}"
+      @library << [:reply, reply]
     end
   end
 end
