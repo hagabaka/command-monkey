@@ -23,3 +23,10 @@ Synopsis
   irb = CommandMonkey.new('irb', /irb.*>/)
   irb.command('1+3') # => expect '4'
 
+Requirement
+===========
+
+Command Monkey currently uses Revactor, which is available through RubyGems,
+but only for Ruby 1.9+. I was originally using Thread, but I was unable to
+debug the library that way.
+
