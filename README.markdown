@@ -14,18 +14,18 @@ and call commands at any time.
 
 ## Synopsis
 
-  require 'command-monkey'
+    require 'command-monkey'
 
-  # Run the program 'irb', whose prompts match /irb.*>/
-  irb = CommandMonkey.new('irb', /irb.*>/)
+    # Run the program 'irb', whose prompts match /irb.*>/
+    irb = CommandMonkey.new('irb', /irb.*>/)
 
-  # Strip '=> ' from irb's output before returning them
-  def irb.filter_output(text)
-    super(text).sub(/\A=> /m, '')
-  end
+    # Strip '=> ' from irb's output before returning them
+    def irb.filter_output(text)
+      super(text).sub(/\A=> /m, '')
+    end
 
-  irb.command('1+3') #=> "4"
-  irb.command('"a".upcase') #=> "A"
+    irb.command('1+3') #=> "4"
+    irb.command('"a".upcase') #=> "A"
 
 ## Requirement
 
