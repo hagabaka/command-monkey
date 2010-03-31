@@ -21,7 +21,14 @@ Synopsis
 
   # Run the program 'irb', whose prompts match /irb.*>/
   irb = CommandMonkey.new('irb', /irb.*>/)
-  irb.command('1+3') # => expect '4'
+
+  # Strip '=> ' from irb's output before returning them
+  def irb.filter_output(text)
+    super(text).sub(/\A=> /m, '')
+  end
+
+  irb.command('1+3') #=> "4"
+  irb.command('"a".upcase') #=> "A"
 
 Requirement
 ===========
