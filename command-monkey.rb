@@ -52,7 +52,7 @@ class CommandMonkey
   # prompt
   def get_reply(&block)
     @output.expect @prompt do |reply, *_|
-      reply = reply.sub(/#{@prompt}\z/m, '')
+      reply.sub!(/#{@prompt}\z/m, '')
       yield reply if block_given?
     end
   end
