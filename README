@@ -33,5 +33,7 @@ debug the library that way.
 Status
 ======
 
-Currently Command Monkey works, as tested with irb and pacmd, but it returns
-the entered command along with the output.
+Currently Command Monkey works, as tested with irb and pacmd. The output
+strings are unstripped; it may change in the future and may add a mechanism to
+control stripping and other filtering.
+
