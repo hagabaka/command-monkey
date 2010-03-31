@@ -48,13 +48,19 @@ class CommandMonkey
     end
   end
 
+  # Captured output from the program is filtered through this method before
+  # being returned
+  def filter_output(text)
+    text.strip
+  end
+
   # Wait for the program to show its prompt, and return the output before the
   # prompt
   def get_reply(strip_command=nil, &block)
     @output.expect @prompt do |reply, *_|
       reply.sub!(/#{@prompt}\z/m, '')
       reply.sub!(/\A\s+#{Regexp.quote strip_command}/, '') if strip_command
-      yield reply if block_given?
+      yield filter_output(reply) if block_given?
     end
   end
 end
