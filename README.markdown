@@ -1,8 +1,6 @@
-Command Monkey
---------------
+# Command Monkey
 
-Overview
-========
+## Overview
 
 Command Monkey is a Ruby library to work with interactive command-reply
 programs. Such programs display a prompt to the user, expect command input, and
@@ -14,8 +12,7 @@ program running in the background, so your own program can do what it needs,
 and call commands at any time.
 
 
-Synopsis
-========
+## Synopsis
 
   require 'command-monkey'
 
@@ -30,15 +27,13 @@ Synopsis
   irb.command('1+3') #=> "4"
   irb.command('"a".upcase') #=> "A"
 
-Requirement
-===========
+## Requirement
 
 Command Monkey currently uses Revactor, which is available through RubyGems,
 but only for Ruby 1.9+. I was originally using Thread, but I was unable to
 debug the library that way.
 
-Status
-======
+## Status
 
 Currently Command Monkey works, as tested with irb and pacmd. The output
 strings are unstripped; it may change in the future and may add a mechanism to
