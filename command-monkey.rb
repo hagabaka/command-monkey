@@ -30,9 +30,9 @@ class CommandMonkey
               puts "Sent #{text}"
 
               # wait for the next prompt, which should mark the end of the reply
-              output.expect prompt do |reply|
+              output.expect prompt do |reply, *_|
                 puts "Received #{reply}"
-                @library << [:reply, text]
+                @library << [:reply, reply]
               end
             end
           end
