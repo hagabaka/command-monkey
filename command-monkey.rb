@@ -18,9 +18,7 @@ class CommandMonkey
       PTY.spawn program do |output, input, pid|
         @output = output
 
-        get_reply do |reply|
-          puts "Launched #{program}, PID #{pid}"
-        end
+        get_reply
 
         loop do
           # wait for a command request
@@ -28,7 +26,6 @@ class CommandMonkey
             filter.when Case[:command, String] do |_, text|
               # enter the command
               input.print "#{text}\n"
-              puts "Sent #{text}"
 
               # wait for the next prompt, which should mark the end of the reply
               get_reply do |reply|
@@ -44,10 +41,8 @@ class CommandMonkey
   # Send a command to the pacmd session, and return the output
   def command(text)
     @operator << [:command, text]
-    puts "Requested #{text}"
     Actor.receive do |filter| 
       filter.when Case[:reply, String] do |_, reply|
-        puts "Received reply"
         reply
       end
     end
@@ -58,7 +53,6 @@ class CommandMonkey
   def get_reply
     @output.expect @prompt do |reply, *_|
       reply = reply.gsub(/#{@prompt}\z/m, '')
-      puts "Received #{reply}"
       @library << [:reply, reply]
     end
   end
