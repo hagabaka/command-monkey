@@ -28,7 +28,7 @@ class CommandMonkey
               input.print "#{text}\n"
 
               # wait for the next prompt, which should mark the end of the reply
-              get_reply(/\A\s+#{Regexp.quote text}/) do |reply|
+              get_reply(text) do |reply|
                 @library << [:reply, reply]
               end
             end
@@ -53,7 +53,7 @@ class CommandMonkey
   def get_reply(strip_command=nil, &block)
     @output.expect @prompt do |reply, *_|
       reply.sub!(/#{@prompt}\z/m, '')
-      reply.sub!(strip_command, '') if strip_command
+      reply.sub!(/\A\s+#{Regexp.quote strip_command}/, '') if strip_command
       yield reply if block_given?
     end
   end
