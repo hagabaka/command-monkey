@@ -50,10 +50,10 @@ class CommandMonkey
 
   # Wait for the program to show its prompt, and return the output before the
   # prompt
-  def get_reply
+  def get_reply(&block)
     @output.expect @prompt do |reply, *_|
-      reply = reply.gsub(/#{@prompt}\z/m, '')
-      @library << [:reply, reply]
+      reply = reply.sub(/#{@prompt}\z/m, '')
+      yield reply if block_given?
     end
   end
 end
