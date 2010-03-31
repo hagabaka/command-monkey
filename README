@@ -30,3 +30,8 @@ Command Monkey currently uses Revactor, which is available through RubyGems,
 but only for Ruby 1.9+. I was originally using Thread, but I was unable to
 debug the library that way.
 
+Status
+======
+
+Currently Command Monkey works, as tested with irb and pacmd, but it returns
+the entered command along with the output.
