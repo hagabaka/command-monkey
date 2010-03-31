@@ -1,5 +1,6 @@
 require 'pty'
 require 'expect'
+require 'revactor'
 
 # This library runs an interactive program, such as pacmd or irb, and provides
 # a method to execute commands in the program and return the replies.
@@ -8,16 +9,11 @@ class CommandMonkey
   # program: the interactive program to execute
   # prompt: regex detecting the interactive program's prompt
   def initialize(program, prompt)
+    @library = Actor.current
 
-    # the main thread pushes command requests to @command_queue
-    @command_queue = Queue.new
-
-    # the interactive program thread pushes command replies to @reply_queue
-    @reply_queue = Queue.new
-    
     # run the program in a separate thread so that this library does not block
     # the client program
-    @program_thread = Thread.new do
+    @operator = Actor.spawn do
       PTY.spawn program do |output, input, pid|
 
         output.expect prompt do |text|
@@ -27,16 +23,18 @@ class CommandMonkey
 
         loop do
           # wait for a command request
-          command = @command_queue.pop
+          Actor.receive do |filter|
+            filter.when Case[:command, String] do |_, text|
+              # enter the command
+              input.print "#{text}\n"
+              puts "Sent #{text}"
 
-          # enter the command
-          input.put "#{command}\n"
-          puts "Sent #{command}"
-
-          # wait for the next prompt, which should mark the end of the reply
-          output.expect PROMPT do |text|
-            puts "Received #{text}"
-            @reply_queue << text
+              # wait for the next prompt, which should mark the end of the reply
+              output.expect prompt do |reply|
+                puts "Received #{reply}"
+                @library << [:reply, text]
+              end
+            end
           end
         end
       end
@@ -45,8 +43,14 @@ class CommandMonkey
 
   # Send a command to the pacmd session, and return the output
   def command(text)
-    @command_queue << text
-    @reply_queue.pop
+    @operator << [:command, text]
+    puts "Requested #{text}"
+    Actor.receive do |filter| 
+      filter.when Case[:reply, String] do |_, reply|
+        puts "Received reply"
+        reply
+      end
+    end
   end
 end
 
