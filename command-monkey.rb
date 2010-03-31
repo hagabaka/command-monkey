@@ -54,12 +54,17 @@ class CommandMonkey
     text.strip
   end
 
+  # Return the pattern which needs to be removed, based on the command text
+  def strip_command_pattern(command)
+    /\A\s+#{Regexp.quote command}/
+  end
+
   # Wait for the program to show its prompt, and return the output before the
   # prompt
-  def get_reply(strip_command=nil, &block)
+  def get_reply(command=nil, &block)
     @output.expect @prompt do |reply, *_|
       reply.sub!(/#{@prompt}\z/m, '')
-      reply.sub!(/\A\s+#{Regexp.quote strip_command}/, '') if strip_command
+      reply.sub!(strip_command_pattern(command), '') if command
       yield filter_output(reply) if block_given?
     end
   end
