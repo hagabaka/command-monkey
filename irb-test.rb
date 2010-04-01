@@ -7,6 +7,6 @@ def irb.filter_output(text)
   super(text).sub(/\A=> /m, '')
 end
 
-p irb.send('1+3')
-p irb.send('"a".upcase')
+p irb.enter('1+3')
+p irb.enter('"a".upcase')
 

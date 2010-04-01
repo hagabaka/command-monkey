@@ -3,5 +3,5 @@
 require 'command-monkey'
 
 pacmd = CommandMonkey.new('pacmd', />>>\s+/)
-puts pacmd.send('list-sinks')
+puts pacmd.enter('list-sinks')
 
