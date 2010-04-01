@@ -33,7 +33,5 @@ Command Monkey currently uses Fiber, and consequently requires Ruby 1.9.
 
 ## Status
 
-Currently Command Monkey works, as tested with irb and pacmd. The output
-strings are unstripped; it may change in the future and may add a mechanism to
-control stripping and other filtering.
+Currently Command Monkey works, as tested with irb and pacmd.
 
