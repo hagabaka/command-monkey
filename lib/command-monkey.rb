@@ -10,23 +10,27 @@ class CommandMonkey
   def initialize(program, prompt)
     @prompt = prompt
 
-    # run the program in a separate thread so that this library does not block
-    # the client program
+    # run the program in a fiber to avoid blocking the caller
     @operator = Fiber.new do |command|
       PTY.spawn program do |output, input, pid|
         @output = output
 
+        # wait for the prompt
         get_reply
 
         loop do
+          # enter the newly requested command
           input.puts command
+          
+          # wait for the prompt, and get the reply, fall back to sleep until
+          # getting the next requested command
           command = Fiber.yield get_reply(command)
         end
       end
     end
   end
 
-  # Send a command to the pacmd session, and return the output
+  # Send a command to the program, and return the output
   def enter(command)
     @operator.resume(command)
   end
