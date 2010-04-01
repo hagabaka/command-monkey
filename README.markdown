@@ -25,7 +25,7 @@ and call commands at any time.
     end
 
     irb.enter('1+3') #=> "4"
-    irb.enter('"a".upcase') #=> "A"
+    irb.enter('"a".upcase') #=> '"A"'
 
 ## Requirement
 
