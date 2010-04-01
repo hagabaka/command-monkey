@@ -42,6 +42,8 @@ class CommandMonkey
     /\A\s+#{Regexp.quote command}/
   end
 
+  private
+
   # Wait for the program to show its prompt, and yield the output before the
   # prompt to the block
   def get_reply(command=nil)
