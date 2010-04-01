@@ -20,9 +20,7 @@ class CommandMonkey
 
         loop do
           input.puts command
-          get_reply(command) do |reply|
-            command = Fiber.yield reply
-          end
+          command = Fiber.yield get_reply(command)
         end
       end
     end
@@ -46,11 +44,11 @@ class CommandMonkey
 
   # Wait for the program to show its prompt, and yield the output before the
   # prompt to the block
-  def get_reply(command=nil, &block)
+  def get_reply(command=nil)
     @output.expect @prompt do |reply, *_|
       reply.sub!(/#{@prompt}\z/m, '')
       reply.sub!(strip_command_pattern(command), '') if command
-      yield filter_output(reply) if block_given?
+      return filter_output(reply)
     end
   end
 end
