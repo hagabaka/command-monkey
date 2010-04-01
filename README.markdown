@@ -29,9 +29,7 @@ and call commands at any time.
 
 ## Requirement
 
-Command Monkey currently uses Revactor, which is available through RubyGems,
-but only for Ruby 1.9+. I was originally using Thread, but I was unable to
-debug the library that way.
+Command Monkey currently uses Fiber, and consequently requires Ruby 1.9.
 
 ## Status
 
