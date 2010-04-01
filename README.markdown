@@ -24,8 +24,8 @@ and call commands at any time.
       super(text).sub(/\A=> /m, '')
     end
 
-    irb.command('1+3') #=> "4"
-    irb.command('"a".upcase') #=> "A"
+    irb.enter('1+3') #=> "4"
+    irb.enter('"a".upcase') #=> "A"
 
 ## Requirement
 

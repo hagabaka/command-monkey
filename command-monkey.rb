@@ -27,7 +27,7 @@ class CommandMonkey
   end
 
   # Send a command to the pacmd session, and return the output
-  def send(command)
+  def enter(command)
     @operator.resume(command)
   end
 
