@@ -48,8 +48,8 @@ class CommandMonkey
 
   private
 
-  # Wait for the program to show its prompt, and yield the output before the
-  # prompt to the block
+  # Wait for the program to show its prompt, return the output after the
+  # command and before the prompt
   def get_reply(command=nil)
     @output.expect @prompt do |reply, *_|
       reply.sub!(/#{@prompt}\z/m, '')
